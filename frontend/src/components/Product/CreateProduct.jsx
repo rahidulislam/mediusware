@@ -8,9 +8,48 @@ import {
   Row,
   Table,
 } from "react-bootstrap";
+import AppUrl from "../../RestAPI/AppUrl";
+import RestClient from "../../RestAPI/RestClient";
 
 export default class CreateProduct extends Component {
+  constructor(props) {
+    super(props);
+    this.state={
+      variants:[],
+      color:[],
+      size:[]
+    }
+    this.handleChange = this.handleChange.bind(this);
+  }
+  componentDidMount(){
+    RestClient.getRequest(AppUrl.variants).then((result)=>{
+      this.setState({variants:result});
+    })
+  }
+  handleChange(event){
+    console.log(event.target.value)
+    //this.setState({variantOption: event.target.value})
+  }
   render() {
+    const myVariantList = this.state.variants
+    const myVariant=myVariantList.map((variantItem)=>{
+      return <Row>
+      <Form.Text className="text-primary my-2">
+        {variantItem.title}
+      </Form.Text>
+      <Col>
+        <Form.Control as="select" onChange={this.handleChange}>
+          {variantItem.item_variant.map((item, index)=>{
+            return <option value={item.varint_name}>{item.varint_name} (index}</option>
+          })}
+          
+        </Form.Control>
+      </Col>
+      <Col>
+        <Form.Control placeholder="Color"/>
+      </Col>
+    </Row>
+    })
     return (
       <Fragment>
         <Container className="mt-5">
@@ -62,40 +101,8 @@ export default class CreateProduct extends Component {
                             <h6 className="text-white text-center mb-0">Varriant</h6>
                           </Card.Header>
                           <Card.Body>
-                            <Row>
-                              <Form.Text className="text-primary my-2">
-                                Color
-                              </Form.Text>
-                              <Col>
-                                <Form.Control as="select">
-                                  <option value="red">Red</option>
-                                  <option value="blue">Blue</option>
-                                  <option value="green">Green</option>
-                                  <option value="black">Black</option>
-                                  <option value="orange">Orange</option>
-                                </Form.Control>
-                              </Col>
-                              <Col>
-                                <Form.Control placeholder="Color" />
-                              </Col>
-                            </Row>
-                            <Row>
-                              <Form.Text className="text-primary my-2">
-                                Variant
-                              </Form.Text>
-                              <Col>
-                                <Form.Control as="select">
-                                  <option value="red">Red</option>
-                                  <option value="blue">Blue</option>
-                                  <option value="green">Green</option>
-                                  <option value="black">Black</option>
-                                  <option value="orange">Orange</option>
-                                </Form.Control>
-                              </Col>
-                              <Col>
-                                <Form.Control placeholder="Variant" />
-                              </Col>
-                            </Row>
+                            {myVariant}
+                            
                             <Row className="mt-5">
                               <h6>Priview</h6>
                               <Col>

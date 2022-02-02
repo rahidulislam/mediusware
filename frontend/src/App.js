@@ -1,11 +1,14 @@
-import AllProduct from "./components/Product/AllProduct";
-import CreateProduct from "./components/Product/CreateProduct";
+import { BrowserRouter } from "react-router-dom";
+import AppRoute from "./router/AppRoute";
+
 
 
 function App() {
   return (
     <div>
-      <CreateProduct/>
+      <BrowserRouter>
+      <AppRoute/>
+      </BrowserRouter>
     </div>
   );
 }
